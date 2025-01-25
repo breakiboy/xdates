@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Entdecke die besten Links aus der Schweiz! Erotik, Sex und dein persönliches Erotiknetzwerk – alles an einem Ort. Durchstöbere unsere Linksammlung jetzt!">
+  <title>Xdates 24/7 - Das beste Sex und Erotik Netzwerk</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    .banner-link {
+      display: block;
+      margin-top: 5px;
+      text-align: center;
+    }
+    .banner-link img {
+      width: 300px;
+      height: 250px;
+      object-fit: cover;
+    }
+    .sixads {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .sixads .link {
+      display: inline-block;
+      background-color: #007bff;
+      color: #fff;
+      padding: 5px 12px;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .rss-item {
+      margin-bottom: 15px;
+    }
+    .rss-item h4 {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+    .rss-item p {
+      font-size: 14px;
+    }
+
+    #rss-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 20px; /* Abstand zwischen den Karten */
+    }
+
+    .card {
+      width: 100%; /* Volle Breite der Karte */
+      max-width: 100%; /* Keine Begrenzung */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-body {
+      flex-grow: 1;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .card-text {
+      font-size: 0.9rem;
+      color: #555;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3; /* Beschränkt die Beschreibung auf 3 Zeilen */
+      -webkit-box-orient: vertical;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  </style>
+  <script>
+    const API_BASE_URL = 'https://backend.6love.ch/api/statistics';
+    let banners = [];
+
+    async function fetchBanners() {
+      const response = await fetch('https://backend.6love.ch/api/banners-with-impressions/?limit=6');
+      if (!response.ok) throw new Error(`Error fetching banners: ${response.statusText}`);
+      banners = await response.json();
+    }
+
+    async function fetchRSS() {
+      const RSS_URL = 'https://forum.6love.ch/latest.rss';
+      try {
+        const response = await fetch(RSS_URL);
+        const text = await response.text();
+
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(text, "text/xml");
+        const items = xml.querySelectorAll("item");
+
+        const rssContainer = document.getElementById("rss-feed");
+
+        items.forEach((item, index) => {
+          if (index >= 5) return;
+
+          const title = item.querySelector("title").textContent;
+          const link = item.querySelector("link").textContent;
+          const description = item.querySelector("description").textContent;
+
+          const card = document.createElement("div");
+          card.className = "card";
+
+          card.innerHTML = `
+        <div class="card-body">
+          <h5 class="card-title">${title}</h5>
+          <p class="card-text">${description}</p>
+        </div>
+      `;
+          rssContainer.appendChild(card);
+        });
+      } catch (error) {
+        console.error("Fehler beim Abrufen des RSS-Feeds:", error);
+      }
+    }
+
+    function insertBanner(bannerIndex, elementId) {
+      if (banners[bannerIndex]) {
+        const banner = banners[bannerIndex];
+        const bannerElement = document.getElementById(elementId);
+        bannerElement.innerHTML = `
+                    <a class="banner-link" href="${banner.link}" target="_blank" rel="nofollow noopener" title="${banner.text}">
+                        <img src="${banner.image.full}" alt="${banner.text}" />
+                    </a>
+                    <div class="sixads">
+                        <a href="https://6love.ch/de/pricing" class="link">sixads</a>
+                    </div>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      console.log("DOM vollständig geladen");
+      await fetchBanners();
+      console.log("Banners erfolgreich geladen");
+
+      await fetchRSS();
+      console.log("RSS erfolgreich geladen");
+
+      for (let i = 0; i < banners.length; i++) {
+        const elementId = `banner-${i + 1}`;
+        insertBanner(i, elementId);
+      }
+    });
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Xdates 24/7",
+      "url": "https://6love.ch",
+      "description": "Entdecke die besten Links aus der Schweiz! Erotik, Sex und dein persönliches Erotiknetzwerk – alles an einem Ort. Durchstöbere unsere Linksammlung jetzt!",
+      "sameAs": [
+        "https://instagram.com/6love_swiss",
+        "https://www.facebook.com/6loveCH/",
+        "https://www.threads.net/@6love_swiss",
+        "https://x.com/6loveCH",
+        "https://www.youtube.com/@6love963",
+        "https://www.snapchat.com/add/sixlove.ch",
+        "https://api.whatsapp.com/send?phone=417787394445",
+        "https://tiktok.com/@6lovech",
+        "https://mastodon.social/@6love",
+        "https://bsky.app/profile/sixlove.bsky.social",
+        "https://discord.gg/fC5PGATNkX",
+        "https://www.twitch.tv/6lovech",
+        "https://github.com/breakiboy/6love",
+        "https://www.linkedin.com/in/evren-yilmaz-6a62a6a7/",
+        "https://t.me/sixlovenet",
+        "https://www.pinterest.de/sixlove/",
+        "https://soundcloud.com/6love-ch",
+        "https://www.patreon.com/c/Sixlove"
+      ],
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://6love.ch/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+</head>
+<body>
+<div class="container py-5">
+  <h1 class="text-center mb-4">xDates 24/7 – Das geilste Link-Netzwerk!</h1>
+
+  <div class="py-5">
+    <h2 class="text-center">SixAds</h2>
+    <div class="d-flex justify-content-around flex-wrap">
+      <div id="banner-1" class="banner-section my-4"></div>
+      <div id="banner-2" class="banner-section my-4"></div>
+      <div id="banner-3" class="banner-section my-4"></div>
+    </div>
+  </div>
+
+  <h2 class="text-center mb-4">Sex & Erotik Netzwerk</h2>
+
+  <div class="row g-4">
+    <!-- Social Media Links -->
+    <div class="col">
+      <h3>Social Media</h3>
+      <ul class="list-group">
+        <li class="list-group-item"><i class="fab fa-instagram me-2"></i><a href="https://instagram.com/6love_swiss" target="_blank">Instagram</a></li>
+        <li class="list-group-item"><i class="fab fa-facebook me-2"></i><a href="https://www.facebook.com/6loveCH/" target="_blank">Facebook</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://www.threads.net/@6love_swiss" target="_blank">Threads</a></li>
+        <li class="list-group-item"><i class="fab fa-twitter me-2"></i><a href="https://x.com/6loveCH" target="_blank">X (Twitter)</a></li>
+        <li class="list-group-item"><i class="fab fa-youtube me-2"></i><a href="https://www.youtube.com/@6love963" target="_blank">YouTube</a></li>
+        <li class="list-group-item"><i class="fab fa-snapchat me-2"></i><a href="https://www.snapchat.com/add/sixlove.ch" target="_blank">Snapchat</a></li>
+        <li class="list-group-item"><i class="fab fa-whatsapp me-2"></i><a href="https://api.whatsapp.com/send?phone=417787394445" target="_blank">WhatsApp</a></li>
+        <li class="list-group-item"><i class="fab fa-tiktok me-2"></i><a href="https://tiktok.com/@6lovech" target="_blank">TikTok</a></li>
+        <li class="list-group-item"><i class="fab fa-mastodon me-2"></i><a href="https://mastodon.social/@6love" target="_blank">Mastodon</a></li>
+        <li class="list-group-item"><i class="fas fa-envelope me-2"></i><a href="mailto:info@6love.ch" target="_blank">E-Mail</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://bsky.app/profile/sixlove.bsky.social" target="_blank">Bluesky</a></li>
+        <li class="list-group-item"><i class="fab fa-discord me-2"></i><a href="https://discord.gg/fC5PGATNkX" target="_blank">Discord</a></li>
+        <li class="list-group-item"><i class="fab fa-twitch me-2"></i><a href="https://www.twitch.tv/6lovech" target="_blank">Twitch</a></li>
+        <li class="list-group-item"><i class="fab fa-github me-2"></i><a href="https://github.com/breakiboy/6love" target="_blank">GitHub</a></li>
+        <li class="list-group-item"><i class="fab fa-linkedin me-2"></i><a href="https://www.linkedin.com/in/evren-yilmaz-6a62a6a7/" target="_blank">LinkedIn</a></li>
+        <li class="list-group-item"><i class="fab fa-telegram me-2"></i><a href="https://t.me/sixlovenet" target="_blank">Telegram</a></li>
+        <li class="list-group-item"><i class="fab fa-pinterest me-2"></i><a href="https://www.pinterest.de/sixlove/" target="_blank">Pinterest</a></li>
+        <li class="list-group-item"><i class="fab fa-soundcloud me-2"></i><a href="https://soundcloud.com/6love-ch" target="_blank">SoundCloud</a></li>
+        <li class="list-group-item"><i class="fab fa-patreon me-2"></i><a href="https://www.patreon.com/c/Sixlove" target="_blank">Patreon</a></li>
+
+
+        <li class="list-group-item"><i class="fab fa-patreon me-2"></i><a href="https://fans.ly/application/form?r=6love" target="_blank">Fansly 6love</a></li>
+
+      </ul>
+    </div>
+    <!-- Other Links -->
+    <div class="col">
+      <h3>Websites</h3>
+      <ul class="list-group">
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://6love.ch" target="_blank">6love Sex Portal</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://sexportale.my.canva.site" target="_blank">Sixlove Sky</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://forum.6love.ch" target="_blank">Forum 6love</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://sixnetwork.ch" target="_blank">Sixnetwork</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://www.yilmaz.services" target="_blank">Yilmaz Services</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://sexdate.services" target="_blank">Sexdate Services</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://xdateguide.blogspot.com" target="_blank">xdateguide</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://storage.googleapis.com/xdate/index.html" target="_blank">24/7 xdates</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://www.tumblr.com/blog/6lovech" target="_blank">Tumblr</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://www.lang-strasse.ch" target="_blank">Langstrasse Zürich</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://sex-portale.ch" target="_blank">Sex Portale Schweiz</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://sixlove.ghost.io/" target="_blank">Sixlove Ghost</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://www.rotlichtadressen.ch/" target="_blank">Rotlichtadressen</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://rotlichtmilieu.ch/" target="_blank">Rotlichtmilieu</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://erotikbetriebe.ch/" target="_blank">Erotikbetriebe</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://sixlove.ch/" target="_blank">Sixlove</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://sixads.ch/" target="_blank">Sixads</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://sixbot.ch/" target="_blank">Sixbot</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://sixmap.ch/" target="_blank">Sixmap</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://orospusepeti.com/" target="_blank">Orospu Sepeti</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://blist.ch/" target="_blank">Erotic API</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://backend.6love.ch/" target="_blank">Escort API</a></li>
+        <li class="list-group-item"><i class="fab fa-patreon me-2"></i><a href="https://fans.ly/r/6love" target="_blank">Fansly 6love</a></li>
+        <li class="list-group-item"><i class="fab fa-patreon me-2"></i><a href="https://fancentro.com/sell/registration/?acode=8dEYtVin" target="_blank">Fancentro</a></li>
+        <li class="list-group-item"><i class="fab fa-patreon me-2"></i><a href="https://onlyfans.com/sixlove-swiss" target="_blank">OnlyFans 6love</a></li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <h3>BIO Pages</h3>
+      <ul class="list-group">
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://bio.site/sixlove" target="_blank">BioSite</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://its-my.link/@6love" target="_blank">Its My Link</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://heylink.me/sixlove/" target="_blank">HeyLink</a></li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <h3>Cam Sites</h3>
+      <ul class="list-group">
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://x-cam.ch/joinmenow" target="_blank">XCam</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://susi.live/livelanding?ADR=wp0e4f15a0" target="_blank">Susi Live</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://www.hotcam.ch/" target="_blank">Hotcam</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://chaturbate.com/in/?tour=LQps&campaign=9MGQt&track=default&room=breakiboy" target="_blank">Chaturbate</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://bongacams8.com/track?c=801025" target="_blank">Bongacams</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://sex-now.ch/" target="_blank">Sexnow</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://www.hotanddirty.ch/" target="_blank">HotAndDirty</a></li>
+        <li class="list-group-item"><i class="fas fa-link me-2"></i><a href="https://xdare.ch/" target="_blank">Xdare</a></li>
+      </ul>
+    </div>
+
+
+    <h2 class="text-center mb-4">Sex & Erotik Netzwerk</h2>
+
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/FE8cq_8FXVE?si=pOaxb3etgaC4ROqY"
+            title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+    <div class="container my-5">
+      <h2 class="text-center">Es erfordert viel Einsatz, ein großes Erotik- und Sex-Netzwerk wie Sixnetwork zu betrieben</h2>
+      <p>
+        Ein Netzwerk wie <b>sixnetwork</b> aufzubauen und zu verwalten, ist eine enorme Herausforderung. Neben den technischen Anforderungen und der kontinuierlichen Pflege der Plattform ist der zeitliche Aufwand immens – vor allem, wenn der Betreiber hauptberuflich anderweitig angestellt ist. Der Betrieb einer solchen Plattform erfordert nicht nur finanzielle Mittel, sondern auch ein hohes Maß an Engagement und Leidenschaft für die Community.
+      </p>
+      <h3>Wie kannst du helfen?</h3>
+      <p>
+        Ganz einfach: Unterstütze uns, indem du uns auf Social Media folgst, unsere Beiträge teilst oder regelmäßig unsere Blogs liest. Jede Interaktion hilft uns, sichtbarer zu werden und das Netzwerk weiter auszubauen.
+      </p>
+      <p>
+        Unser Ziel ist es, <b>Content Creators</b>, <b>SexworkerInnen</b> und allen Beteiligten in der Erotikbranche eine Plattform zu bieten. Wir wissen, dass dieses Berufsfeld oft diskriminiert wird, obwohl die Dienstleistungen von vielen Menschen in Anspruch genommen werden. Deshalb setzen wir uns für die Rechte dieser Community ein und möchten allen unsere Hand reichen.
+      </p>
+      <h3>Dein Beitrag zählt – sei ein Teil unserer Vision!</h3>
+      <p>
+        Besuche unsere Plattform, teile unsere Inhalte oder werde Teil der Diskussion auf unseren Social-Media-Kanälen. Gemeinsam können wir ein positives Zeichen setzen!
+      </p>
+    </div>
+
+    <div class="py-3">
+      <h2 class="text-center">Mehr Reichweite Mehr Erfolg</h2>
+      <div class="d-flex justify-content-around flex-wrap">
+        <div id="banner-4" class="banner-section my-4"></div>
+        <div id="banner-5" class="banner-section my-4"></div>
+        <div id="banner-6" class="banner-section my-4"></div>
+      </div>
+    </div>
+
+    <div class="container py-5">
+      <div class="blog-section">
+        <h2>Entdecke Xdates in der Schweiz – Dein Schlüssel zu aufregenden Erlebnissen!</h2>
+        <p>
+          Bist du bereit, das aufregendste Erotiknetzwerk der Schweiz zu erleben? Auf <b>6love</b> findest du eine riesige Auswahl an <a href="https://6love.ch" target="_blank">xdates</a>,
+          die auf diskrete und spannende Begegnungen warten. Mit unserer Lustmap kannst du die besten Locations entdecken – ob in Zürich, Genf oder Luzern – alles nur einen Klick entfernt!
+        </p>
+
+        <div class="video-container text-center my-4">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/8uHY_cUc_Bo"
+                  title="YouTube video player" frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen></iframe>
+        </div>
+
+        <h3>Warum xdates auf 6love.ch einzigartig sind</h3>
+        <p>
+          Unsere Plattform bietet dir alles, was du für dein perfektes Abenteuer brauchst. Dank verifizierter Nutzerprofile und einer benutzerfreundlichen Oberfläche kannst du schnell und sicher Kontakte knüpfen.
+          Unsere <a href="https://6love.ch/maps" target="_blank">Lustmaps</a> zeigt dir nicht nur die heißesten Locations, sondern sorgt auch dafür, dass du dich nie verläufst.
+        </p>
+        <h3>Vorteile</h3>
+        <ul>
+          <li><strong>Verifizierte Profile:</strong> Alle Nutzer sind echt, sodass du dich auf reale Begegnungen freuen kannst.</li>
+          <li><strong>Diskretion garantiert:</strong> Deine Daten und Privatsphäre sind bei uns sicher.</li>
+          <li><strong>Lustmap:</strong> Finde Locations wie Swingerclubs, Erotik-Studios oder diskrete Apartments direkt auf der Karte.</li>
+          <li><strong>Einzigartige Community:</strong> Tausende von aktiven Nutzern, die genau wie du nach aufregenden Erlebnissen suchen.</li>
+        </ul>
+        <h3>Wie du dein nächstes Xdate findest</h3>
+        <p>
+          Der Einstieg ist einfach: Besuche <a href="https://6love.ch" target="_blank">6love.ch</a> und entdecke die Vielfalt an Möglichkeiten. Filtere nach Regionen, Vorlieben oder Locations – alles ist individuell anpassbar.
+          Mit nur wenigen Klicks kannst du Kontakt aufnehmen und dein nächstes Abenteuer planen.
+        </p>
+        <h3>Bereit für die geile xDates?</h3>
+        <p>
+          Unsere <a href="https://6love.ch/maps" target="_blank">Lustmaps</a> ist der Schlüssel zu den besten Locations in der Schweiz. Egal ob du nach einem exklusiven Swingerclub oder einem privaten Treffen suchst, unsere interaktive Karte macht es möglich, deine Wünsche zu erfüllen.
+        </p>
+        <p>
+          Worauf wartest du? Besuche <a href="https://6love.ch" target="_blank">6love.ch</a> und entdecke die Welt der Xdates noch heute. Deine nächste aufregende Begegnung könnte nur einen Klick entfernt sein!
+        </p>
+      </div>
+    </div>
+
+    <h2>Interessante Artikel</h2>
+    <li class="list-group-item"><i class="fas fa-link me-2"></i>
+      <a href="https://telegra.ph/Geile-Xdates-in-der-Schweiz-01-09" target="_blank">
+        https://telegra.ph/Geile-Xdates-in-der-Schweiz-01-09
+      </a>
+    </li>
+    <li class="list-group-item"><i class="fas fa-link me-2"></i>
+      <a href="https://telegra.ph/Die-besten-Sex-Portale-der-Schweiz-Dein-Guide-zu-den-Top-Seiten-01-18" target="_blank">
+        https://telegra.ph/Die-besten-Sex-Portale-der-Schweiz-Dein-Guide-zu-den-Top-Seiten-01-18
+      </a>
+    </li>
+    <li class="list-group-item"><i class="fas fa-link me-2"></i>
+      <a href="https://medium.com/@sixlove/wie-ich-nebenberuflich-mit-django-rest-api-und-angular-18-ein-modernes-erotikportal-aufgebaut-habe-ce9d815c1c58" target="_blank">
+        https://medium.com/@sixlove/wie-ich-nebenberuflich-mit-django-rest-api-und-angular-18-ein-modernes-erotikportal-aufgebaut-habe-ce9d815c1c58
+      </a>
+    </li>
+
+    <h2>Aktuelles aus dem Sex Forum</h2>
+    <div id="rss-feed" class="row">
+    </div>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
